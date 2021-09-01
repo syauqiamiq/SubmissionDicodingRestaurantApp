@@ -1,31 +1,37 @@
 import 'package:flutter/foundation.dart';
-import 'package:restaurant_app/models/restaurant_api_model.dart';
+import 'package:restaurant_app/models/restaurant_query_model.dart';
 import 'package:restaurant_app/services/api_services.dart';
 
 enum ResultState { Loading, NoData, HasData, Error }
 
-class RestaurantProvider extends ChangeNotifier {
+class RestaurantQueryProvider extends ChangeNotifier {
   final ApiServices apiService;
 
-  RestaurantProvider({required this.apiService}) {
-    _fetchAllRestaurant();
+  RestaurantQueryProvider({required this.apiService}) {
+    _fetchRestaurantQuery();
   }
 
-  late RestaurantList _restaurantList;
+  late RestaurantQuery _restaurantQuery;
   late String _message = '';
   late ResultState _state;
+  late String context = '';
 
   String get message => _message;
 
-  RestaurantList get resultList => _restaurantList;
+  RestaurantQuery get resultQuery => _restaurantQuery;
 
   ResultState get state => _state;
 
-  Future<dynamic> _fetchAllRestaurant() async {
+  void setContext(String value) {
+    this.context = value;
+    _fetchRestaurantQuery();
+  }
+
+  Future<dynamic> _fetchRestaurantQuery() async {
     try {
       _state = ResultState.Loading;
       notifyListeners();
-      final restaurants = await apiService.getRestaurant();
+      final restaurants = await apiService.getRestaurantQuery(context);
       if (restaurants.restaurants.isEmpty) {
         _state = ResultState.NoData;
         notifyListeners();
@@ -33,7 +39,7 @@ class RestaurantProvider extends ChangeNotifier {
       } else {
         _state = ResultState.HasData;
         notifyListeners();
-        return _restaurantList = restaurants;
+        return _restaurantQuery = restaurants;
       }
     } catch (e) {
       _state = ResultState.Error;

@@ -18,6 +18,7 @@ class _MainScreenState extends State<MainScreen> {
     return Scaffold(
       body: currentScreen,
       floatingActionButton: FloatingActionButton(
+        backgroundColor: Colors.green,
         onPressed: () {
           Navigator.pushReplacement(
             context,
@@ -56,12 +57,12 @@ class _MainScreenState extends State<MainScreen> {
                       children: [
                         Icon(
                           Icons.dashboard,
-                          color: currentTab == 0 ? Colors.blue : Colors.grey,
+                          color: currentTab == 0 ? Colors.green : Colors.grey,
                         ),
                         Text(
                           "Restaurant",
                           style: TextStyle(
-                            color: currentTab == 0 ? Colors.blue : Colors.grey,
+                            color: currentTab == 0 ? Colors.green : Colors.grey,
                           ),
                         ),
                       ],
@@ -85,12 +86,12 @@ class _MainScreenState extends State<MainScreen> {
                       children: [
                         Icon(
                           Icons.search,
-                          color: currentTab == 2 ? Colors.blue : Colors.grey,
+                          color: currentTab == 2 ? Colors.green : Colors.grey,
                         ),
                         Text(
                           "Search",
                           style: TextStyle(
-                            color: currentTab == 2 ? Colors.blue : Colors.grey,
+                            color: currentTab == 2 ? Colors.green : Colors.grey,
                           ),
                         ),
                       ],
