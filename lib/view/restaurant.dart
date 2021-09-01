@@ -162,11 +162,31 @@ class RestaurantScreen extends StatelessWidget {
                 );
               } else if (state.state == ResultState.NoData) {
                 return Center(
-                  child: Text(state.message),
+                  child: Text(
+                    "Data Tidak Ditemukan",
+                    textAlign: TextAlign.justify,
+                    style: GoogleFonts.poppins(
+                      textStyle: TextStyle(
+                        fontSize: 24,
+                        fontWeight: FontWeight.w600,
+                        color: Colors.grey[600],
+                      ),
+                    ),
+                  ),
                 );
               } else if (state.state == ResultState.Error) {
                 return Center(
-                  child: Text(state.message),
+                  child: Text(
+                    "Terjadi Error, Cek Koneksi Anda",
+                    textAlign: TextAlign.justify,
+                    style: GoogleFonts.poppins(
+                      textStyle: TextStyle(
+                        fontSize: 24,
+                        fontWeight: FontWeight.w600,
+                        color: Colors.grey[600],
+                      ),
+                    ),
+                  ),
                 );
               } else {
                 return Center(
