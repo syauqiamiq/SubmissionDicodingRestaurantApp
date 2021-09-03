@@ -3,17 +3,52 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import 'package:restaurant_app/provider/restaurant_detail_provider.dart';
 import 'package:restaurant_app/services/api_services.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
-class RestaurantDetailScreen extends StatelessWidget {
+class RestaurantDetailScreen extends StatefulWidget {
   final String restoId;
   RestaurantDetailScreen({
     required this.restoId,
   });
+
+  @override
+  _RestaurantDetailScreenState createState() => _RestaurantDetailScreenState();
+}
+
+class _RestaurantDetailScreenState extends State<RestaurantDetailScreen> {
+  @override
+  void initState() {
+    super.initState();
+    _loadFavorite();
+  }
+
+  bool _onClick = false;
+  void _resetFavorite() async {
+    final prefs = await SharedPreferences.getInstance();
+    prefs.remove('isFavorite${widget.restoId}');
+    _loadFavorite();
+  }
+
+  void _saveFavorite() async {
+    final prefs = await SharedPreferences.getInstance();
+    _onClick = true;
+    prefs.setBool('isFavorite${widget.restoId}', _onClick);
+    setState(() {});
+  }
+
+  void _loadFavorite() async {
+    final prefs = await SharedPreferences.getInstance();
+    setState(() {
+      _onClick = prefs.getBool('isFavorite${widget.restoId}') ?? false;
+      print(_onClick);
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return ChangeNotifierProvider(
-      create: (_) =>
-          RestaurantDetailProvider(apiService: ApiServices(), id: restoId),
+      create: (_) => RestaurantDetailProvider(
+          apiService: ApiServices(), id: widget.restoId),
       child: Scaffold(
         body: SafeArea(
           child: Container(
@@ -64,23 +99,44 @@ class RestaurantDetailScreen extends StatelessWidget {
                         height: 10,
                       ),
                       Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          Icon(
-                            Icons.location_pin,
-                            size: 25,
-                            color: Colors.red,
-                          ),
-                          SizedBox(width: 2),
-                          Text(
-                            resto.city,
-                            style: GoogleFonts.poppins(
-                              textStyle: TextStyle(
-                                fontSize: 14,
-                                fontWeight: FontWeight.w400,
-                                color: Colors.grey[600],
+                          Row(
+                            children: [
+                              Icon(
+                                Icons.location_pin,
+                                size: 25,
+                                color: Colors.red,
                               ),
-                            ),
+                              SizedBox(width: 2),
+                              Text(
+                                resto.city,
+                                style: GoogleFonts.poppins(
+                                  textStyle: TextStyle(
+                                    fontSize: 14,
+                                    fontWeight: FontWeight.w400,
+                                    color: Colors.grey[600],
+                                  ),
+                                ),
+                              ),
+                            ],
                           ),
+                          ClipOval(
+                            child: MaterialButton(
+                              color: Colors.green,
+                              child: Icon(
+                                Icons.favorite,
+                                color: (_onClick) ? Colors.red : Colors.white,
+                              ),
+                              onPressed: () {
+                                if (_onClick) {
+                                  _resetFavorite();
+                                } else {
+                                  _saveFavorite();
+                                }
+                              },
+                            ),
+                          )
                         ],
                       ),
                       SizedBox(
