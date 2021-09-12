@@ -2,53 +2,20 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import 'package:restaurant_app/provider/restaurant_detail_provider.dart';
+import 'package:restaurant_app/provider/result_state.dart';
 import 'package:restaurant_app/services/api_services.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
-class RestaurantDetailScreen extends StatefulWidget {
+class RestaurantDetailScreen extends StatelessWidget {
+  static const routeName = '/restaurant_detail';
   final String restoId;
   RestaurantDetailScreen({
     required this.restoId,
   });
-
-  @override
-  _RestaurantDetailScreenState createState() => _RestaurantDetailScreenState();
-}
-
-class _RestaurantDetailScreenState extends State<RestaurantDetailScreen> {
-  @override
-  void initState() {
-    super.initState();
-    _loadFavorite();
-  }
-
-  bool _onClick = false;
-  void _resetFavorite() async {
-    final prefs = await SharedPreferences.getInstance();
-    prefs.remove('isFavorite${widget.restoId}');
-    _loadFavorite();
-  }
-
-  void _saveFavorite() async {
-    final prefs = await SharedPreferences.getInstance();
-    _onClick = true;
-    prefs.setBool('isFavorite${widget.restoId}', _onClick);
-    setState(() {});
-  }
-
-  void _loadFavorite() async {
-    final prefs = await SharedPreferences.getInstance();
-    setState(() {
-      _onClick = prefs.getBool('isFavorite${widget.restoId}') ?? false;
-      print(_onClick);
-    });
-  }
-
   @override
   Widget build(BuildContext context) {
     return ChangeNotifierProvider(
-      create: (_) => RestaurantDetailProvider(
-          apiService: ApiServices(), id: widget.restoId),
+      create: (_) =>
+          RestaurantDetailProvider(apiService: ApiServices(), id: restoId),
       child: Scaffold(
         body: SafeArea(
           child: Container(
@@ -121,22 +88,6 @@ class _RestaurantDetailScreenState extends State<RestaurantDetailScreen> {
                               ),
                             ],
                           ),
-                          ClipOval(
-                            child: MaterialButton(
-                              color: Colors.green,
-                              child: Icon(
-                                Icons.favorite,
-                                color: (_onClick) ? Colors.red : Colors.white,
-                              ),
-                              onPressed: () {
-                                if (_onClick) {
-                                  _resetFavorite();
-                                } else {
-                                  _saveFavorite();
-                                }
-                              },
-                            ),
-                          )
                         ],
                       ),
                       SizedBox(

@@ -7,7 +7,7 @@ import 'package:restaurant_app/view/main_screen.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({Key? key}) : super(key: key);
-
+  static const routeName = '/splash';
   @override
   _SplashScreenState createState() => _SplashScreenState();
 }
@@ -20,12 +20,7 @@ class _SplashScreenState extends State<SplashScreen> {
         Duration(
           seconds: 3,
         ), () {
-      Navigator.pushReplacement(
-        context,
-        MaterialPageRoute(
-          builder: (context) => MainScreen(),
-        ),
-      );
+      Navigator.pushReplacementNamed(context, MainScreen.routeName);
     });
   }
 

@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:restaurant_app/view/favorite_restaurant.dart';
 import 'package:restaurant_app/view/restaurant.dart';
 import 'package:restaurant_app/view/restaurant_search_screen.dart';
+import 'package:restaurant_app/view/setting_page.dart';
 
 class MainScreen extends StatefulWidget {
   const MainScreen({Key? key}) : super(key: key);
-
+  static const routeName = '/main_screen';
   @override
   _MainScreenState createState() => _MainScreenState();
 }
@@ -20,11 +22,9 @@ class _MainScreenState extends State<MainScreen> {
       floatingActionButton: FloatingActionButton(
         backgroundColor: Colors.green,
         onPressed: () {
-          Navigator.pushReplacement(
+          Navigator.pushReplacementNamed(
             context,
-            MaterialPageRoute(
-              builder: (context) => MainScreen(),
-            ),
+            MainScreen.routeName,
           );
         },
         child: Icon(Icons.home),
@@ -41,9 +41,6 @@ class _MainScreenState extends State<MainScreen> {
               Row(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  SizedBox(
-                    width: 15,
-                  ),
                   MaterialButton(
                     onPressed: () {
                       setState(() {
@@ -63,6 +60,30 @@ class _MainScreenState extends State<MainScreen> {
                           "Restaurant",
                           style: TextStyle(
                             color: currentTab == 0 ? Colors.green : Colors.grey,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  MaterialButton(
+                    onPressed: () {
+                      setState(() {
+                        currentScreen = FavoriteRestaurantScreen();
+                        currentTab = 1;
+                      });
+                    },
+                    minWidth: 40,
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Icon(
+                          Icons.favorite,
+                          color: currentTab == 1 ? Colors.green : Colors.grey,
+                        ),
+                        Text(
+                          "Favorite",
+                          style: TextStyle(
+                            color: currentTab == 1 ? Colors.green : Colors.grey,
                           ),
                         ),
                       ],
@@ -97,8 +118,29 @@ class _MainScreenState extends State<MainScreen> {
                       ],
                     ),
                   ),
-                  SizedBox(
-                    width: 15,
+                  MaterialButton(
+                    onPressed: () {
+                      setState(() {
+                        currentScreen = SettingScreen();
+                        currentTab = 3;
+                      });
+                    },
+                    minWidth: 40,
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Icon(
+                          Icons.settings,
+                          color: currentTab == 3 ? Colors.green : Colors.grey,
+                        ),
+                        Text(
+                          "Settings",
+                          style: TextStyle(
+                            color: currentTab == 3 ? Colors.green : Colors.grey,
+                          ),
+                        ),
+                      ],
+                    ),
                   ),
                 ],
               ),
